@@ -123,16 +123,6 @@ if __name__ == "__main__":
             if not tables_df.empty:
                 print("\n📋 表列表详情:")
                 print(tables_df)
-
-                # 统计引擎类型分布
-                engine_stats = tables_df['engine_type'].value_counts()
-                print("\n🔧 表引擎类型分布:")
-                print(engine_stats)
-
-                # 保存为CSV
-                csv_path = f"hk_perpetual_tables_{datetime.now().strftime('%Y%m%d')}.csv"
-                tables_df.to_csv(csv_path, index=False)
-                print(f"\n💾 表列表已保存至: {csv_path}")
             else:
                 print("⚠️ 未找到任何表")
         else:
