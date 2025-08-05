@@ -51,20 +51,17 @@ def get_table_list():
     try:
         # 获取所有表名和引擎类型
         query = """
-                SELECT name AS table_name, engine AS engine_type, create_time
+                SELECT *
                 FROM system.tables
                 WHERE database = 'hk_perpetual'
-                ORDER BY create_time DESC \
+                
                 """
         result = ch_client.execute(query)
 
         # 转换为DataFrame
-        df = pd.DataFrame(result, columns=['table_name', 'engine_type', 'create_time'])
+        df = pd.DataFrame(result)
 
-        # 转换时间格式
-        if not df.empty and 'create_time' in df.columns:
-            df['create_time'] = pd.to_datetime(df['create_time'])
-
+     
         return df
     except Exception as e:
         print(f"❌ 获取表列表失败: {str(e)}")
