@@ -61,12 +61,51 @@ def get_table_list():
         # 转换为DataFrame
         df = pd.DataFrame(result)
 
-     
+
         return df
     except Exception as e:
         print(f"❌ 获取表列表失败: {str(e)}")
         return pd.DataFrame()
 
+
+def get_t_order():
+    """获取交易表信息"""
+    try:
+        # 获取所有表名和引擎类型
+        query = """
+                SELECT *
+                FROM t_order
+               limit 10
+
+                """
+        result = ch_client.execute(query)
+
+        # 转换为DataFrame
+        df = pd.DataFrame(result)
+
+        return df
+    except Exception as e:
+        print(f"❌ 获取交易表失败: {str(e)}")
+        return pd.DataFrame()
+def get_t_account():
+    """获取交易表信息"""
+    try:
+        # 获取所有表名和引擎类型
+        query = """
+                SELECT *
+                FROM t_account
+               limit 10
+
+                """
+        result = ch_client.execute(query)
+
+        # 转换为DataFrame
+        df = pd.DataFrame(result)
+
+        return df
+    except Exception as e:
+        print(f"❌ 获取账户表失败: {str(e)}")
+        return pd.DataFrame()
 
 if __name__ == "__main__":
     print(f"🕒 连接时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -98,3 +137,5 @@ if __name__ == "__main__":
                 print("⚠️ 未找到任何表")
         else:
             print("⚠️ 无法获取表数量信息")
+        print("交易表:",get_t_order())
+        print("账户表:",get_t_account())
