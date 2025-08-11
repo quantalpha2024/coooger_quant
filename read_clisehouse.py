@@ -230,6 +230,8 @@ def get_t_d_accountdetail():
             # 第三步：创建带列名的DataFrame
             df = pd.DataFrame(result_data, columns=[ 'CreateTime','AccountDetailID','MemberID','Balance','Source','Amount'])
             df=calc_pl(df)
+            print("\n数据预览:")
+            print(df.head(3))  # 只打印前3行避免过多输出
             result.loc[memberid,'start date']=df['CreateTime'].iloc[0]
             result.loc[memberid, 'end date'] = df['CreateTime'].iloc[-1]
             result.loc[memberid, 'annualized_return'] =calc_annualized_return(df)
@@ -237,8 +239,7 @@ def get_t_d_accountdetail():
             result.loc[memberid, 'sharpe_ratio'] = calc_sharpe_ratio(df)
             result.loc[memberid, 'sortino_ratio'] = calc_sortino_ratio(df)
             # 可选：打印DataFrame的前几行
-            print("\n数据预览:")
-            print(df.head(3))  # 只打印前3行避免过多输出
+
             time.sleep(1)
 
         # 可选：打印DataFrame的前几行
