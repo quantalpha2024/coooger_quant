@@ -27,7 +27,10 @@ def calc_pl(df):
                 df.loc[i, 'pl'] = pl
         else:
             if shares == 0:
-                pl = df.loc[i - 1, 'pl']
+                try:
+                   pl = df.loc[i - 1, 'pl']
+                except:
+                    pl=1
             else:
                 pl = df['Balance'].iloc[i] / shares
             df.loc[i, 'shares'] = shares
