@@ -45,7 +45,11 @@ def resample_pl(df,rule="1D"):
     temp.reset_index(inplace=True)
     return temp
 def calc_annualized_return(df):
-        total_return = df['pl'].iloc[-1] -1
+        if df['pl'].iloc[-1]<0:
+            total_return=-1
+        else:
+            total_return = df['pl'].iloc[-1] -1
+
         total_return = float(total_return)
         trading_days = (df['CreateTime'].iloc[-1] - df['CreateTime'].iloc[0]).days + 1
         return round((1 + total_return) ** (365 / trading_days) - 1,4)
