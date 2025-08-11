@@ -114,7 +114,7 @@ def get_t_d_accountdetail():
         query = """
                 SELECT *
                 FROM  t_d_accountdetail
-               limit 10
+               limit 1000
 
                 """
         result = ch_client.execute(query)
