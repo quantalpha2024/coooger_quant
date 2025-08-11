@@ -77,10 +77,10 @@ def calc_sortino_ratio(df):
         sortino = annualized_return / downside_risk
         return round(sortino, 4)
 
-def calc_sharpe_ratio(df, risk_free_rate=0):
+def calc_sharpe_ratio(df):
         df = resample_pl(df)
         df['daily_returns'] = df['pl'].pct_change().dropna()
-        excess_returns = df['daily_returns'] - (risk_free_rate / 365)
+        excess_returns = df['daily_returns']
         sharpe = np.sqrt(365) * excess_returns.mean() / excess_returns.std()
         return round(sharpe, 4)
 
