@@ -137,7 +137,7 @@ def get_t_d_accountdetail():
     result_data = ch_client.execute(data_query)
 
     # 第三步：创建带列名的DataFrame
-    MemberID = pd.DataFrame(result_data,column_names=['MemberID'])#, columns=column_names)
+    MemberID = pd.DataFrame(result_data,columns=['MemberID'])#, columns=column_names)
     for memberid in MemberID['MemberID']:
             # 第二步：获取实际数据
             data_query = f"""
