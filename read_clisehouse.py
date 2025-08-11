@@ -1,3 +1,5 @@
+import time
+
 import pandas as pd
 from clickhouse_driver import Client
 from datetime import datetime
@@ -142,7 +144,7 @@ def get_t_d_accountdetail():
             # 第二步：获取实际数据
             data_query = f"""
                          SELECT *
-                         FROM t_d_accountdetail where MemberID='{memberid}' limit 1000
+                         FROM t_d_accountdetail where MemberID='{memberid}' limit 2000
                          """
             result_data = ch_client.execute(data_query)
 
@@ -151,7 +153,8 @@ def get_t_d_accountdetail():
 
             # 可选：打印DataFrame的前几行
             print("\n数据预览:")
-            print(df.head(3))  # 只打印前3行避免过多输出
+            print(df.head(2000))  # 只打印前3行避免过多输出
+            time.sleep(1)
 
         # 可选：打印DataFrame的前几行
         #print("\n数据预览:")
