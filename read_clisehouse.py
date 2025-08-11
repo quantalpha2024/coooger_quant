@@ -1,8 +1,74 @@
 import time
-
 import pandas as pd
 from clickhouse_driver import Client
 from datetime import datetime
+import numpy as np
+def calc_pl(df):
+    df['CreateTime'] = pd.to_datetime(df['CreateTime'])
+    df = df.sort_values(by=['CreateTime', 'AccountDetailID'])
+    df.index = [i for i in range(len(df))]
+    shares = 0
+    pl = 1
+    for i in range(0, len(df)):
+        if df['Source'].iloc[i] == '3' or df['Source'].iloc[i] == '4':  # 申购和赎回，增加或减少份额
+            shares = shares + df['Amount'].iloc[i] / pl
+            if df['Balance'].iloc[i] < 1:  # 如果账户资金小于1U，清盘操作
+                shares = 0
+                df.loc[i, 'shares'] = shares
+                df.loc[i, 'pl'] = df.loc[i - 1, 'pl']
+            else:
+                pl = df['Balance'].iloc[i] / shares
+                df.loc[i, 'shares'] = shares
+                df.loc[i, 'pl'] = pl
+        else:
+            if shares == 0:
+                pl = df.loc[i - 1, 'pl']
+            else:
+                pl = df['Balance'].iloc[i] / shares
+            df.loc[i, 'shares'] = shares
+            df.loc[i, 'pl'] = pl
+    return df
+def resample_pl(df,rule="1D"):
+    '''
+    净值曲线
+    '''
+    rule = rule.upper()
+    if rule[-1:] == 'M':
+        rule = rule[:-1] + 'T'
+    agg_rule = {
+        'pl': 'last'
+    }
+    cols = [k for k in agg_rule.keys()]
+    cols.append('CreateTime')
+    temp = df[cols].resample(rule=rule, closed='left', label='left', on='CreateTime').agg(agg_rule)
+    temp['pl']=temp['pl'].fillna(method='ffill')
+    temp.reset_index(inplace=True)
+    return temp
+def calc_annualized_return(df):
+        total_return = df['pl'].iloc[-1] -1
+        trading_days = (df['CreateTime'].iloc[-1] - df['CreateTime'].iloc[0]).days + 1
+        return round((1 + total_return) ** (365 / trading_days) - 1,4)
+def calc_max_drawdown(df):
+        peak = df['pl'].expanding().max()
+        dd = (peak - df['pl']) / peak
+        return round(dd.max(), 4)
+def calculate_calmar_ratio(df):
+        return round(calc_annualized_return(df)/calc_max_drawdown(df),4)
+def calc_sortino_ratio(df):
+        df=resample_pl(df)
+        annualized_return =calc_annualized_return(df)
+        df['daily_returns'] = df['pl'].pct_change().dropna()
+        downside_returns = df[df['daily_returns'] < 0]
+        downside_risk = downside_returns['daily_returns'].std() * np.sqrt(365)
+        sortino = annualized_return / downside_risk
+        return round(sortino, 4)
+
+def calc_sharpe_ratio(df, risk_free_rate=0):
+        df = resample_pl(df)
+        df['daily_returns'] = df['pl'].pct_change().dropna()
+        excess_returns = df['daily_returns'] - (risk_free_rate / 365)
+        sharpe = np.sqrt(365) * excess_returns.mean() / excess_returns.std()
+        return round(sharpe, 4)
 
 # 连接ClickHouse数据库
 ch_client = Client(
@@ -140,6 +206,8 @@ def get_t_d_accountdetail():
 
     # 第三步：创建带列名的DataFrame
     MemberID = pd.DataFrame(result_data,columns=['MemberID'])#, columns=column_names)
+    result=pd.DataFrame()
+    result.index.name='MemberID'
     for memberid in MemberID['MemberID']:
             # 第二步：获取实际数据
             data_query = f"""
@@ -150,7 +218,13 @@ def get_t_d_accountdetail():
 
             # 第三步：创建带列名的DataFrame
             df = pd.DataFrame(result_data, columns=[ 'CreateTime','AccountDetailID','MemberID','Balance','Source','Amount'])
-
+            pl_df=calc_pl(df)
+            result.loc[memberid,'start date']=pl_df['CreateTime'].iloc[0]
+            result.loc[memberid, 'end date'] = pl_df['CreateTime'].iloc[-1]
+            result.loc[memberid, 'annualized_return'] =calc_annualized_return(df)
+            result.loc[memberid, 'max_drawdown'] = calc_max_drawdown(df)
+            result.loc[memberid, 'sharpe_ratio'] = calc_sharpe_ratio(df)
+            result.loc[memberid, 'sortino_ratio'] = calc_sortino_ratio(df)
             # 可选：打印DataFrame的前几行
             print("\n数据预览:")
             print(df.head(3))  # 只打印前3行避免过多输出
@@ -159,7 +233,8 @@ def get_t_d_accountdetail():
         # 可选：打印DataFrame的前几行
         #print("\n数据预览:")
         #print(df.head(3))  # 只打印前3行避免过多输出
-    return df
+
+    return result
 
 
 
@@ -185,4 +260,5 @@ if __name__ == "__main__":
             print("⚠️ 无法获取表数量信息")
         print("交易表:",get_t_order())
         print("账户表:",get_t_account())
-        print(get_t_d_accountdetail())
+        d=get_t_d_accountdetail()
+        d.to_csv('t_d_accountdetail.csv')
