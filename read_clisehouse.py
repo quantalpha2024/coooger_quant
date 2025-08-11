@@ -218,9 +218,9 @@ def get_t_d_accountdetail():
 
             # 第三步：创建带列名的DataFrame
             df = pd.DataFrame(result_data, columns=[ 'CreateTime','AccountDetailID','MemberID','Balance','Source','Amount'])
-            pl_df=calc_pl(df)
-            result.loc[memberid,'start date']=pl_df['CreateTime'].iloc[0]
-            result.loc[memberid, 'end date'] = pl_df['CreateTime'].iloc[-1]
+            df=calc_pl(df)
+            result.loc[memberid,'start date']=df['CreateTime'].iloc[0]
+            result.loc[memberid, 'end date'] = df['CreateTime'].iloc[-1]
             result.loc[memberid, 'annualized_return'] =calc_annualized_return(df)
             result.loc[memberid, 'max_drawdown'] = calc_max_drawdown(df)
             result.loc[memberid, 'sharpe_ratio'] = calc_sharpe_ratio(df)
