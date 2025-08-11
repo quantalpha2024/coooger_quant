@@ -54,12 +54,18 @@ def calc_annualized_return(df):
         trading_days = (df['CreateTime'].iloc[-1] - df['CreateTime'].iloc[0]).days + 1
         return round((1 + total_return) ** (365 / trading_days) - 1,4)
 def calc_max_drawdown(df):
+        if df['pl'].iloc[-1] < 0:
+            return -1
         peak = df['pl'].expanding().max()
         dd = (peak - df['pl']) / peak
         return round(dd.max(), 4)
 def calculate_calmar_ratio(df):
+        if df['pl'].iloc[-1] < 0:
+            return 0
         return round(calc_annualized_return(df)/calc_max_drawdown(df),4)
 def calc_sortino_ratio(df):
+        if df['pl'].iloc[-1] < 0:
+           return -1
         df=resample_pl(df)
         annualized_return =calc_annualized_return(df)
         df['daily_returns'] = df['pl'].pct_change().dropna()
