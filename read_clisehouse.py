@@ -46,6 +46,7 @@ def resample_pl(df,rule="1D"):
     return temp
 def calc_annualized_return(df):
         total_return = df['pl'].iloc[-1] -1
+        total_return = float(total_return)
         trading_days = (df['CreateTime'].iloc[-1] - df['CreateTime'].iloc[0]).days + 1
         return round((1 + total_return) ** (365 / trading_days) - 1,4)
 def calc_max_drawdown(df):
