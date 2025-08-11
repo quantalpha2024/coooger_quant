@@ -118,7 +118,7 @@ def get_t_d_accountdetail():
 
                 """
         result = ch_client.execute(query)
-
+        print(result)
         # 转换为DataFrame
         df = pd.DataFrame(result)
 
