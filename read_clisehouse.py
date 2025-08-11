@@ -139,7 +139,7 @@ def get_t_d_accountdetail():
         result_data = ch_client.execute(data_query)
 
         # 第三步：创建带列名的DataFrame
-        df = pd.DataFrame(result_data, columns=column_names)
+        df = pd.DataFrame(result_data)#, columns=column_names)
 
         # 可选：打印DataFrame的前几行
         print("\n数据预览:")
