@@ -107,22 +107,36 @@ def get_t_account():
         print(f"❌ 获取账户表失败: {str(e)}")
         return pd.DataFrame()
 
-def get_t_d_accountdetail():
-    """获取交易表信息"""
-    try:
-        # 获取所有表名和引擎类型
-        query = """
-                SELECT *
-                FROM  t_d_accountdetail
-               limit 1000
 
-                """
-        result = ch_client.execute(query)
-        print(result)
-        # 转换为DataFrame
-        df = pd.DataFrame(result)
+
+
+def get_t_d_accountdetail():
+    """获取交易表信息（包含列名）"""
+    try:
+        # 第一步：获取表结构（列名）
+        col_query = "DESCRIBE TABLE t_d_accountdetail"
+        columns_info = ch_client.execute(col_query)
+        column_names = [col[0] for col in columns_info]  # 提取列名
+
+        print("表头（列名）:")
+        print(column_names)  # 打印列名
+
+        # 第二步：获取实际数据
+        data_query = """
+                     SELECT *
+                     FROM t_d_accountdetail LIMIT 1000 \
+                     """
+        result_data = ch_client.execute(data_query)
+
+        # 第三步：创建带列名的DataFrame
+        df = pd.DataFrame(result_data, columns=column_names)
+
+        # 可选：打印DataFrame的前几行
+        print("\n数据预览:")
+        print(df.head(3))  # 只打印前3行避免过多输出
 
         return df
+
     except Exception as e:
         print(f"❌ 获取账户表失败: {str(e)}")
         return pd.DataFrame()
