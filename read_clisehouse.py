@@ -142,7 +142,7 @@ def get_t_d_accountdetail():
             # 第二步：获取实际数据
             data_query = f"""
                          SELECT *
-                         FROM t_d_accountdetail where MemberID={memberid}
+                         FROM t_d_accountdetail where MemberID='{memberid}'
                          """
             result_data = ch_client.execute(data_query)
 
