@@ -57,6 +57,7 @@ def calc_annualized_return(df):
         trading_days = (df['CreateTime'].iloc[-1] - df['CreateTime'].iloc[0]).days + 1
         return round((1 + total_return) ** (365 / trading_days) - 1,4)
 def calc_max_drawdown(df):
+        df['pl']=df['pl'].astype(float)
         if df['pl'].iloc[-1] < 0:
             return -1
         peak = df['pl'].expanding().max()
