@@ -112,35 +112,33 @@ def get_t_account():
 
 def get_t_d_accountdetail():
     """获取交易表信息（包含列名）"""
-    try:
-        # 第一步：获取表结构（列名）
-        col_query = "DESCRIBE TABLE t_d_accountdetail"
-        columns_info = ch_client.execute(col_query)
-        column_names = [col[0] for col in columns_info]  # 提取列名
+    # 第一步：获取表结构（列名）
+    col_query = "DESCRIBE TABLE t_d_accountdetail"
+    columns_info = ch_client.execute(col_query)
+    column_names = [col[0] for col in columns_info]  # 提取列名
+    print("表头（列名）:")
+    print(column_names)  # 打印列名
 
-        print("表头（列名）:")
-        print(column_names)  # 打印列名
-
-        # 第二步：获取实际数据
-        data_query = """
+    # 第二步：获取实际数据
+    data_query = """
                      SELECT *
                      FROM t_d_accountdetail LIMIT 1000 \
                      """
-        result_data = ch_client.execute(data_query)
+    result_data = ch_client.execute(data_query)
 
-        # 第三步：创建带列名的DataFrame
-        df = pd.DataFrame(result_data, columns=column_names)
+    # 第三步：创建带列名的DataFrame
+    df = pd.DataFrame(result_data, columns=column_names)
 
-        # 可选：打印DataFrame的前几行
-        print("\n数据预览:")
-        print(df.head(3))  # 只打印前3行避免过多输出
+    # 可选：打印DataFrame的前几行
+    print("\n数据预览:")
+    print(df.head(3))  # 只打印前3行避免过多输出
 
-        data_query=f""" SELECT DISTINCT MemberID FROM t_d_accountdetail"""
-        result_data = ch_client.execute(data_query)
+    data_query=f""" SELECT DISTINCT MemberID FROM t_d_accountdetail"""
+    result_data = ch_client.execute(data_query)
 
-        # 第三步：创建带列名的DataFrame
-        MemberID = pd.DataFrame(result_data,column_names=['MemberID'])#, columns=column_names)
-        for memberid in MemberID['MemberID']:
+    # 第三步：创建带列名的DataFrame
+    MemberID = pd.DataFrame(result_data,column_names=['MemberID'])#, columns=column_names)
+    for memberid in MemberID['MemberID']:
             # 第二步：获取实际数据
             data_query = f"""
                          SELECT *
@@ -158,11 +156,9 @@ def get_t_d_accountdetail():
         # 可选：打印DataFrame的前几行
         #print("\n数据预览:")
         #print(df.head(3))  # 只打印前3行避免过多输出
-        return df
+    return df
 
-    except Exception as e:
-        print(f"❌ 获取账户表失败: {str(e)}")
-        return pd.DataFrame()
+
 
 if __name__ == "__main__":
     print(f"🕒 连接时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
