@@ -15,7 +15,9 @@ def calc_pl(df):
             if pl<0.01:
                 pl=1
             shares = shares + df['Amount'].iloc[i] / pl
-            if df['Balance'].iloc[i] < 1:  # 如果账户资金小于1U，清盘操作
+            if i==0:
+                df.loc[i, 'pl']=1
+            elif df['Balance'].iloc[i] < 1:  # 如果账户资金小于1U，清盘操作
                 shares = 0
                 df.loc[i, 'shares'] = shares
                 df.loc[i, 'pl'] = df.loc[i - 1, 'pl']
@@ -233,6 +235,7 @@ def get_t_d_accountdetail():
 
             # 第三步：创建带列名的DataFrame
             df = pd.DataFrame(result_data, columns=[ 'CreateTime','AccountDetailID','MemberID','Balance','Source','Amount'])
+
             df=calc_pl(df)
             print("\n数据预览:")
             print(df.head(3))  # 只打印前3行避免过多输出
