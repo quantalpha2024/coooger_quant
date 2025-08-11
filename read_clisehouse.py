@@ -6,6 +6,7 @@ import numpy as np
 def calc_pl(df):
     df['CreateTime'] = pd.to_datetime(df['CreateTime'])
     df['Amount'] = df['Amount'].astype(float)
+    df['Balance'] = df['Balance'].astype(float)
     df = df.sort_values(by=['CreateTime', 'AccountDetailID'])
     df.index = [i for i in range(len(df))]
     shares = 0
