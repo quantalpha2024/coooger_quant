@@ -153,7 +153,7 @@ def get_t_d_accountdetail():
 
             # 可选：打印DataFrame的前几行
             print("\n数据预览:")
-            print(df.head(2000))  # 只打印前3行避免过多输出
+            print(df)  # 只打印前3行避免过多输出
             time.sleep(1)
 
         # 可选：打印DataFrame的前几行
