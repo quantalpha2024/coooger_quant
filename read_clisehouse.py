@@ -11,6 +11,9 @@ def calc_pl(df):
     pl = 1
     for i in range(0, len(df)):
         if df['Source'].iloc[i] == '3' or df['Source'].iloc[i] == '4':  # 申购和赎回，增加或减少份额
+
+            if pl<0.01:
+                pl=1
             shares = shares + df['Amount'].iloc[i] / pl
             if df['Balance'].iloc[i] < 1:  # 如果账户资金小于1U，清盘操作
                 shares = 0
