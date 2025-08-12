@@ -233,11 +233,11 @@ def get_t_d_accountdetail():
     result.index.name='MemberID'
     N=0
     with open('result.csv', 'w', encoding='utf-8-sig', newline='') as f:
-     writer = csv.writer(f)
-     writer.writerow(['start date', 'end date',
+      writer = csv.writer(f)
+      writer.writerow(['start date', 'end date',
                       'annualized_return', 'max_drawdown',
                       'sharpe_ratio', 'sortino_ratio'])
-     for memberid in MemberID['MemberID']:
+      for memberid in MemberID['MemberID']:
             N=N+1
             print(N)
             # 第二步：获取实际数据
