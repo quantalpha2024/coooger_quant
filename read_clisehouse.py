@@ -252,7 +252,7 @@ def get_t_d_accountdetail():
             result.loc[memberid, 'sortino_ratio'] = calc_sortino_ratio(df)
             # 可选：打印DataFrame的前几行
 
-            time.sleep(1)
+            #time.sleep(0.01)
 
         # 可选：打印DataFrame的前几行
         #print("\n数据预览:")
