@@ -235,8 +235,6 @@ def get_t_d_accountdetail():
     for memberid in MemberID['MemberID']:
             N=N+1
             print(N)
-            if N>1000:
-                break
             # 第二步：获取实际数据
             data_query = f"""
                          SELECT CreateTime,AccountDetailID,MemberID,Balance,Source,Amount
