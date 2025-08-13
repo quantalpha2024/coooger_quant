@@ -229,6 +229,7 @@ def get_t_d_accountdetail():
 
     # 第三步：创建带列名的DataFrame
     MemberID = pd.DataFrame(result_data,columns=['MemberID'])#, columns=column_names)
+    print(MemberID.shape[0])
     result=pd.DataFrame()
     result.index.name='MemberID'
     N=0
