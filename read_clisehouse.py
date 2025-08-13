@@ -224,7 +224,7 @@ def get_t_d_accountdetail():
     print("\n数据预览:")
     print(df.head(3))  # 只打印前3行避免过多输出
 
-    data_query=f""" SELECT DISTINCT MemberID FROM t_d_accountdetail"""
+    data_query=f"""  SELECT DISTINCT MemberID FROM t_d_accountdetail where date(CreateTime) > '2025-07-15' """
     result_data = ch_client.execute(data_query)
 
     # 第三步：创建带列名的DataFrame
