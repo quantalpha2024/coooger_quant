@@ -232,14 +232,11 @@ def get_t_d_accountdetail():
     result=pd.DataFrame()
     result.index.name='MemberID'
     N=0
-    with open('result.csv', 'w', encoding='utf-8-sig', newline='') as f:
-      writer = csv.writer(f)
-      writer.writerow(['start date', 'end date',
-                      'annualized_return', 'max_drawdown',
-                      'sharpe_ratio', 'sortino_ratio'])
-      for memberid in MemberID['MemberID']:
+    for memberid in MemberID['MemberID']:
             N=N+1
             print(N)
+            if N>1000:
+                break
             # 第二步：获取实际数据
             data_query = f"""
                          SELECT CreateTime,AccountDetailID,MemberID,Balance,Source,Amount
@@ -259,10 +256,6 @@ def get_t_d_accountdetail():
             result.loc[memberid, 'max_drawdown'] = calc_max_drawdown(df)
             result.loc[memberid, 'sharpe_ratio'] = calc_sharpe_ratio(df)
             result.loc[memberid, 'sortino_ratio'] = calc_sortino_ratio(df)
-            writer.writerow([result.loc[memberid,'start date'], result.loc[memberid, 'end date'] ,
-                             result.loc[memberid, 'annualized_return'],result.loc[memberid, 'max_drawdown'] ,
-                             result.loc[memberid, 'sharpe_ratio'],result.loc[memberid, 'sortino_ratio']])
-            # 可选：打印DataFrame的前几行
 
             #time.sleep(0.01)
 
