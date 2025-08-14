@@ -233,7 +233,13 @@ def get_t_d_accountdetail():
     result=pd.DataFrame()
     result.index.name='MemberID'
     N=0
-    for memberid in MemberID['MemberID']:
+    for memberid in ['bdf8c5ea-b5ab-4b40-b180-fd5ee2eb0760',
+'0f2e53da-31e3-4105-808b-09ab527c0ede',
+'cb93b5c8-fb7c-40f3-a8c2-0b70f70d5b29',
+'1ccb2cdc-7008-4a3a-ae1f-a6ae62dc3831',
+'3535e019-3455-42e0-b7c8-cc07d3e746f5',
+'392f05eb-57b0-46a0-8b2e-b109131d0641',
+'2de111d6-15a6-4e52-9a89-36543507d9a7'] :#MemberID['MemberID']:
             N=N+1
             print(N)
             # 第二步：获取实际数据
@@ -249,6 +255,7 @@ def get_t_d_accountdetail():
                 continue
 
             df=calc_pl(df)
+            print(memberid,df)
             print("\n数据预览:")
             print(df.head(3))  # 只打印前3行避免过多输出
             result.loc[memberid,'start date']=df['CreateTime'].iloc[0]
