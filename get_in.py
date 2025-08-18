@@ -121,13 +121,7 @@ def get_t_d_accountdetail():
     # 第二步：获取实际数据
     data_query = """
                  SELECT *
-                 FROM t_d_accountdetail where MemberID in ('bdf8c5ea-b5ab-4b40-b180-fd5ee2eb0760',
-'0f2e53da-31e3-4105-808b-09ab527c0ede',
-'cb93b5c8-fb7c-40f3-a8c2-0b70f70d5b29',
-'1ccb2cdc-7008-4a3a-ae1f-a6ae62dc3831',
-'3535e019-3455-42e0-b7c8-cc07d3e746f5',
-'392f05eb-57b0-46a0-8b2e-b109131d0641',
-'2de111d6-15a6-4e52-9a89-36543507d9a7'
+                 FROM t_d_accountdetail where MemberID in ('38275638-1f74-46f5-9d90-7cce3d7b1acd'
 )
                  """
     result_data = ch_client.execute(data_query)
@@ -148,13 +142,7 @@ def get_t_d_trade():
     print("表头（列名）:")
     print(column_names)  # 打印列名
     d=pd.DataFrame()
-    for id in ['bdf8c5ea-b5ab-4b40-b180-fd5ee2eb0760',
-'0f2e53da-31e3-4105-808b-09ab527c0ede',
-'cb93b5c8-fb7c-40f3-a8c2-0b70f70d5b29',
-'1ccb2cdc-7008-4a3a-ae1f-a6ae62dc3831',
-'3535e019-3455-42e0-b7c8-cc07d3e746f5',
-'392f05eb-57b0-46a0-8b2e-b109131d0641',
-'2de111d6-15a6-4e52-9a89-36543507d9a7']:
+    for id in ['38275638-1f74-46f5-9d90-7cce3d7b1acd']:
        # 第二步：获取实际数据
        data_query = f"""
                  SELECT *
