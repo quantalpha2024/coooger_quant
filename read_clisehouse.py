@@ -345,7 +345,10 @@ def get_t_d_accountdetail():
 
             # 第三步：创建带列名的DataFrame
             df = pd.DataFrame(result_data, columns=[ 'CreateTime','AccountDetailID','MemberID','Balance','Source','Amount'])
-            if df['CreateTime'].max() <datetime(2025,7,15):
+            try:
+                if df['CreateTime'].max() <datetime(2025,7,15):
+                    continue
+            except:
                 continue
 
             df=calc_pl(df)
