@@ -244,7 +244,7 @@ def get_t_d_trade():
         print(N)
         # 第二步：获取实际数据
         data_query = f"""
-                         SELECT  MemberID,date(CreateTime),sum(CloseProfit),sum(Turnover)
+                         SELECT  MemberID,date(CreateTime) as dt,sum(CloseProfit) as pnl,sum(Turnover) as amount
                          FROM t_d_trade where MemberID='{memberid}' groupy by MemberID,date(CreateTime)
                          """
         result_data = ch_client.execute(data_query)
