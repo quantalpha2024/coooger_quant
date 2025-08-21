@@ -94,6 +94,8 @@ def calc_sharpe_ratio(df):
         return round(sharpe, 4)
 if __name__ == '__main__':
     df=pd.read_csv("7_t_d_accountdetail.csv")
-    df=calc_pl(df)
-    df.to_csv("cta.csv")
-    print(df)
+    for uid in df.MemberID.unique():
+        d=df#.loc[df['MemberID']==uid]
+        d=calc_pl(d)
+        #df.to_csv("cta.csv")
+        print(uid,d)
