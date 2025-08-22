@@ -250,7 +250,7 @@ def get_t_d_trade():
   SUM(CloseProfit) AS pnl,
   SUM(Turnover) AS amount
 FROM t_d_trade 
-WHERE MemberID = '{memberid}'
+WHERE MemberID = '{memberid}' and InstrumentID ='BTCUSDT'
 GROUP BY DATE(CreateTime), MemberID  
                          """
         result_data = ch_client.execute(data_query)
@@ -287,4 +287,4 @@ if __name__ == "__main__":
         print("交易表:", get_t_order())
         print("账户表:", get_t_account())
         d = get_t_d_trade()
-        d.to_csv('trade.csv')
+        d.to_csv('btc_trade.csv')
