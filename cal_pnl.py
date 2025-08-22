@@ -239,8 +239,12 @@ def get_t_d_trade():
     print(MemberID.shape[0])
     result = pd.DataFrame()
     N = 0
-    for memberid in MemberID['MemberID']:
-        N = N + 1
+    for ii in range(int(MemberID.shape[0]/1000)+1):
+        N = N + 1000
+        if ii==int(MemberID.shape[0]/1000):
+            memberid = MemberID['MemberID'][ii * 1000:].tolist()
+        else:
+            memberid=MemberID['MemberID'][ii*1000:(ii+1)*1000].tolist()
         print(N)
         # 第二步：获取实际数据
         data_query = f"""
@@ -250,7 +254,7 @@ def get_t_d_trade():
   SUM(CloseProfit) AS pnl,
   SUM(Turnover) AS amount
 FROM t_d_trade 
-WHERE MemberID = '{memberid}' and InstrumentID ='BTCUSDT'
+WHERE MemberID in ({memberid})  and InstrumentID ='BTCUSDT'
 GROUP BY DATE(CreateTime), MemberID  
                          """
         result_data = ch_client.execute(data_query)
@@ -258,7 +262,7 @@ GROUP BY DATE(CreateTime), MemberID
         # 第三步：创建带列名的DataFrame
         df = pd.DataFrame(result_data)
         result=result._append(df)
-        time.sleep(0.01)
+        #time.sleep(0.01)
 
 
     return result
