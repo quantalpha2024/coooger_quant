@@ -233,7 +233,6 @@ def get_t_d_accountdetail():
     result=pd.DataFrame()
     result.index.name='MemberID'
     N=0
-
     for memberid in ['27630674-cb6a-46cd-97ca-664f5ea8986d'
             '094dbc7a-f789-4e9e-b064-3d81dcb79e1c'
             '55f43ede-9015-4ad8-ad67-17cabe545bcd'
@@ -412,7 +411,7 @@ def get_t_d_accountdetail():
             'd6586874-f953-4ab1-845d-482f82e66896'
             '845d7164-1b4a-44a9-87dd-067bc3f9047b'] :#MemberID['MemberID']:
             N=N+1
-            print(N)
+            print(N,memberid)
             # 第二步：获取实际数据
             data_query = f"""
                          SELECT CreateTime,AccountDetailID,MemberID,Balance,Source,Amount
