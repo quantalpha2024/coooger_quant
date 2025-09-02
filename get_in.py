@@ -148,12 +148,29 @@ def get_t_d_trade():
     print("表头（列名）:")
     print(column_names)  # 打印列名
     d=pd.DataFrame()
-    for id in ['094dbc7a-f789-4e9e-b064-3d81dcb79e1c',
+    for id in ['27630674-cb6a-46cd-97ca-664f5ea8986d',
+'094dbc7a-f789-4e9e-b064-3d81dcb79e1c',
+'b66b1925-9c36-453e-b67e-49ad7ae484bd',
+'1586107a-b674-4a4c-a225-a7b6f06b33ea',
 'bdf8c5ea-b5ab-4b40-b180-fd5ee2eb0760',
 'ea727e8a-3e86-45c2-953e-e086c4606e65',
-'0b5b0d55-5caf-4572-8428-8ab26ed89963',
+'632d31b8-0db0-4dc9-914f-5649cede1be5',
+'3c349ca0-cfda-47ed-887f-8efd62621e3d',
+'0e8c6847-b51e-4004-8986-12ed4c18d5a1',
+'e33b79a9-fb04-4aa0-a621-243427048378',
+'e8ed00ff-1196-4186-b7ca-4955a596a030',
+'20ee72ed-2f4f-4a7f-a2da-1563652f260e',
+'51c85974-553c-4a65-b504-a91b7f504b77',
+'fe4b9cae-7e5d-456e-9635-2a0b5f63476c',
 '2af16590-3956-473d-80b5-818bdf78104c',
-'9eeaf549-1e57-4ef4-9add-1b79846c61d0']:
+'613cd50e-e42b-4ff7-99e4-bd2155ce7a81',
+'bbe5e9bd-8f0a-4d0f-964e-23ce7ff6fdf5',
+'aee74f73-ce40-4771-88dd-32edefd65e17',
+'9eeaf549-1e57-4ef4-9add-1b79846c61d0',
+'26fc93a8-cf51-4d39-af74-31d100bf8f51',
+'ea601caf-2c73-41d1-b4ad-91a5cd6ea910',
+'aea6e82b-4e69-4676-96bc-5f6375b1fc33',
+]:
        # 第二步：获取实际数据
        data_query = f"""
                  SELECT *
@@ -191,7 +208,7 @@ if __name__ == "__main__":
             print("⚠️ 无法获取表数量信息")
         print("交易表:", get_t_order())
         print("账户表:", get_t_account())
-        d = get_t_d_accountdetail()
-        d.to_csv('7_t_d_accountdetail.csv')
+        #d = get_t_d_accountdetail()
+        #d.to_csv('7_t_d_accountdetail.csv')
         D=get_t_d_trade()
         D.to_csv('7_t_d_trade.csv')
