@@ -118,6 +118,8 @@ def calc_profit_loss_ratio(df):
     total_profit = close_trades.loc[close_trades['CloseProfit'] > 0]['CloseProfit'].sum()
     # 总亏损金额
     total_loss = abs(close_trades.loc[close_trades['CloseProfit'] < 0]['CloseProfit'].sum())
+    if total_loss==0:
+        return ''
     return round(total_profit / total_loss, 4)
 
 
