@@ -58,7 +58,7 @@ for i in range(4):
     plt.tight_layout()
     plt.show()
     df['残差']=df[profit[i]]-df['预测']
-    df.plot.scatter(x='总成交量', y='残差')
+    df.plot.scatter(x=total_volume[i], y='残差')
     # 设置时间格式
     date_format = mdates.DateFormatter('%Y-%m-%d')  # 定义日期格式
     ax.xaxis.set_major_formatter(date_format)

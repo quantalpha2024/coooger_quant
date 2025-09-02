@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
-df=pd.read_excel('策略实盘交易明细.xlsx')
+df=pd.read_excel('策略实盘交易明细1.xlsx')
 print(df)
 
 def resample_pl(df, rule="1D"):
