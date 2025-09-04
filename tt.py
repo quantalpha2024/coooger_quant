@@ -22,7 +22,7 @@ for date in unique_dates:
         #if date.day!=1:
         #    continue
         # 计算回溯时间窗口
-        start_date = date - dt.timedelta(days=366)
+        start_date = date - dt.timedelta(days=365)
         end_date = date - dt.timedelta(days=1)
 
         # 获取回溯期内的数据
@@ -38,12 +38,13 @@ for date in unique_dates:
         user_cumulative_pnl = user_cumulative_pnl.sort_values('累计收益额')
         print(date,user_cumulative_pnl)
         # 选择表现最好和最差的N个用户
-        top_users = user_cumulative_pnl.loc[user_cumulative_pnl['累计收益额']>50000]['uid'].tolist()
-        bottom_users =user_cumulative_pnl.loc[user_cumulative_pnl['累计收益额']<=-20000]['uid'].tolist()
+        if (date + dt.timedelta(days=1)).day==1:
+           top_users = user_cumulative_pnl.loc[user_cumulative_pnl['累计收益额']>100000]['uid'].tolist()
+           bottom_users =user_cumulative_pnl.loc[user_cumulative_pnl['累计收益额']<=-50000]['uid'].tolist()
 
         # 获取选定用户在当日的交易数据
-        top_day_data = df[(df['日期'] >= date) &(df['日期'] <= (date+ dt.timedelta(days=30)) )& (df['uid'].isin(top_users))]
-        bottom_day_data = df[(df['日期'] >= date) &(df['日期'] <= (date+ dt.timedelta(days=30)) )& (df['uid'].isin(bottom_users))]
+        top_day_data = df[(df['日期'] >= date) &(df['日期'] < (date+ dt.timedelta(days=1)) )& (df['uid'].isin(top_users))]
+        bottom_day_data = df[(df['日期'] >= date) &(df['日期'] < (date+ dt.timedelta(days=1)) )& (df['uid'].isin(bottom_users))]
 
         # 计算组合表现
         result.loc[date, 'long_group_pnl'] = top_day_data['收益额'].sum()  # 多头组收益

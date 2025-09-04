@@ -260,7 +260,8 @@ def get_t_d_accountdetail():
     result = pd.DataFrame()
     result.index.name = 'MemberID'
     N = 0
-    for memberid in ['27630674-cb6a-46cd-97ca-664f5ea8986d',
+
+    A=['27630674-cb6a-46cd-97ca-664f5ea8986d',
                      '094dbc7a-f789-4e9e-b064-3d81dcb79e1c',
                      '55f43ede-9015-4ad8-ad67-17cabe545bcd',
                      '0fbe6a09-1999-412c-9650-133de9e02abe',
@@ -436,7 +437,19 @@ def get_t_d_accountdetail():
                      'a224e1ee-084c-4744-b893-3ef1bec91ad8',
                      '38275638-1f74-46f5-9d90-7cce3d7b1acd',
                      'd6586874-f953-4ab1-845d-482f82e66896',
-                     '845d7164-1b4a-44a9-87dd-067bc3f9047b']:  # MemberID['MemberID']:
+                     '845d7164-1b4a-44a9-87dd-067bc3f9047b']
+    for memberid in ['38275638-1f74-46f5-9d90-7cce3d7b1acd',
+'16a64141-9fe0-4491-8361-565d415c103d',
+'8a7b5c02-3b4d-4241-a2d1-3f58c51769a5',
+'17f24fbb-41b2-4cc9-87c0-c81b4a8f9b0a',
+'dfe55fb3-14c7-4b7c-85dc-c565d69c7b39',
+'c7d61ee8-eb4f-4869-a41b-56611eb85e12',
+'a58a4de0-7488-4214-a55d-f2b891708b79',
+'585fd6af-2440-4b12-9f8e-e02b01b0a80e',
+'21c2765c-6a02-48a3-a392-f27b54bf3edc',
+'9b75832c-090b-477b-8e8b-e77b23687112',
+'cd15595c-1e40-483f-ae8a-c09adda90152']:
+            # MemberID['MemberID']:
         N = N + 1
         print(N, memberid)
         # 第二步：获取实际数据
