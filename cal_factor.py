@@ -520,4 +520,4 @@ if __name__ == "__main__":
         print("交易表:", get_t_order())
         print("账户表:", get_t_account())
         d = get_t_d_accountdetail()
-        d.to_csv('t_d_accountdetail.csv')
+        d.to_csv('t_d_accountdetail20250904.csv')
