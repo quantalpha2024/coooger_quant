@@ -210,4 +210,4 @@ if __name__ == "__main__":
         #d = get_t_d_accountdetail()
         #d.to_csv('7_t_d_accountdetail.csv')
         D=get_t_d_trade()
-        D.to_csv('7_t_d_trade.csv')
+        D.to_csv('20250908_d_trade.csv')
