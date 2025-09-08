@@ -123,6 +123,20 @@ def calc_profit_loss_ratio(df):
     return round(total_profit / total_loss, 4)
 
 
+def calc_winner_ratio(df):
+    '''
+     胜率
+    '''
+    close_trades = df.loc[
+        (df['CloseProfit'] != 0)]
+    # 总盈利次数
+    total_profit = close_trades.loc[close_trades['CloseProfit'] > 0]['CloseProfit'].shape[0]
+    # 总亏损次数
+    total_loss = close_trades.loc[close_trades['CloseProfit'] < 0]['CloseProfit'].shape[0]
+    if total_loss==0:
+        return ''
+    return round(total_profit / (total_profit+total_loss), 4)
+
 # 连接ClickHouse数据库
 ch_client = Client(
     host='cc-3nsqvaflp79lvvs06.clickhouse.ads.aliyuncs.com',
@@ -493,6 +507,8 @@ WHERE MemberID = '{memberid}'
         # 第三步：创建带列名的DataFrame
         df = pd.DataFrame(result_data,columns=['TradeTimeMs', 'CloseProfit'])
         result.loc[memberid, 'profit_loss_ratio'] =calc_profit_loss_ratio(df)
+        result.loc[memberid, 'winner_ratio'] = calc_winner_ratio(df)
+
 
 
 
