@@ -2,7 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
-df=pd.read_excel('策略实盘交易明细1.xlsx')
+df=pd.read_csv('策略实盘交易记录-2025-09-05 10_43_03.csv',encoding='gbk')
+df['时间']=pd.to_datetime(df['时间'])
 print(df)
 
 def resample_pl(df, rule="1D"):
@@ -44,6 +45,7 @@ def calculate_sharpe_ratio(df, risk_free_rate=0.0):
 print("最大回撤:",format(calculate_max_drawdown(df), '.4%') )
 print("年化收益率:",format(calculate_annual_return(df), '.4%') )
 print("卡玛比率:",round(calculate_annual_return(df)/calculate_max_drawdown(df),4))
+print("累计成交额:",round(df['quote_qty'].sum()))
 df=resample_pl(df,'15m')
 print("夏普率:",round(calculate_sharpe_ratio(df),4))
 
