@@ -156,7 +156,6 @@ def get_t_d_trade():
 'ea727e8a-3e86-45c2-953e-e086c4606e65',
 '632d31b8-0db0-4dc9-914f-5649cede1be5',
 '3c349ca0-cfda-47ed-887f-8efd62621e3d',
-'0e8c6847-b51e-4004-8986-12ed4c18d5a1',
 'e33b79a9-fb04-4aa0-a621-243427048378',
 'e8ed00ff-1196-4186-b7ca-4955a596a030',
 '20ee72ed-2f4f-4a7f-a2da-1563652f260e',
@@ -167,10 +166,10 @@ def get_t_d_trade():
 'bbe5e9bd-8f0a-4d0f-964e-23ce7ff6fdf5',
 'aee74f73-ce40-4771-88dd-32edefd65e17',
 '9eeaf549-1e57-4ef4-9add-1b79846c61d0',
-'26fc93a8-cf51-4d39-af74-31d100bf8f51',
 'ea601caf-2c73-41d1-b4ad-91a5cd6ea910',
 'aea6e82b-4e69-4676-96bc-5f6375b1fc33',
-]:
+'5fd7a139-dbe7-4295-a695-85054371b410',
+'109b56ab-eb81-4eb8-88d3-a3409ce56e05']:
        # 第二步：获取实际数据
        data_query = f"""
                  SELECT *
