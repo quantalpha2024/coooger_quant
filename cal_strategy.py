@@ -2,8 +2,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
-df=pd.read_csv('策略实盘交易记录-2025-09-05 10_43_03.csv',encoding='gbk')
-df['时间']=pd.to_datetime(df['时间'])
+df=pd.read_excel('策略实盘交易记录-2025-09-19.xlsx')
+df['时间']=pd.to_datetime(df['time'])
+df['净值']=df['pl']
 print(df)
 
 def resample_pl(df, rule="1D"):
