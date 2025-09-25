@@ -95,7 +95,7 @@ class BinanceDataCollector:
                 ) ENGINE = MergeTree()
                 ORDER BY (symbol, candle_begin_time)
                 '''
-                self.client.execute(create_table_query)
+                #self.client.execute(create_table_query)
                 logger.info("数据库表初始化完成")
                 break
             except Exception as e:
@@ -328,7 +328,7 @@ def main():
             'password': 'z9CEdnxjTozUVv!!jH47Ln#',
             'database': 'contract_analysis'
         }
-       
+
 
         logger.info("启动币安数据收集器")
 
