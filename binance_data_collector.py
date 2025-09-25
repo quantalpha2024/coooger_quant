@@ -77,9 +77,9 @@ class BinanceDataCollector:
                     if self.client is None:
                         raise Exception("数据库连接失败")
 
-                drop_table_sql = "DROP TABLE IF EXISTS bz_kline"
-                self.client.execute(drop_table_sql)
-                logger.info("已删除现有表（如果存在）")
+                #drop_table_sql = "DROP TABLE IF EXISTS bz_kline"
+                #self.client.execute(drop_table_sql)
+                #logger.info("已删除现有表（如果存在）")
 
                 create_table_query = '''
                 CREATE TABLE IF NOT EXISTS bz_kline (
