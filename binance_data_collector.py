@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import requests
 from clickhouse_driver import Client
+
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
@@ -77,10 +78,6 @@ class BinanceDataCollector:
                     if self.client is None:
                         raise Exception("数据库连接失败")
 
-                #drop_table_sql = "DROP TABLE IF EXISTS bz_kline"
-                #self.client.execute(drop_table_sql)
-                #logger.info("已删除现有表（如果存在）")
-
                 create_table_query = '''
                 CREATE TABLE IF NOT EXISTS bz_kline (
                     symbol String,
@@ -104,6 +101,67 @@ class BinanceDataCollector:
                     raise
                 time.sleep(5)  # 等待后重试
                 self.client = None  # 重置连接
+
+    def check_data_exists(self, symbol: str, start_time: dt.datetime, end_time: dt.datetime) -> bool:
+        """检查指定symbol和时间范围内的数据是否已经存在"""
+        try:
+            query = """
+            SELECT COUNT(*) 
+            FROM bz_kline 
+            WHERE symbol = %(symbol)s 
+            AND candle_begin_time >= %(start_time)s 
+            AND candle_begin_time <= %(end_time)s
+            """
+            params = {
+                'symbol': symbol,
+                'start_time': start_time,
+                'end_time': end_time
+            }
+            result = self.client.execute(query, params)
+            count = result[0][0] if result else 0
+            return count > 0
+        except Exception as e:
+            logger.error(f"检查数据存在性失败 {symbol}: {e}")
+            return False
+
+    def filter_existing_data(self, data: pd.DataFrame) -> pd.DataFrame:
+        """过滤掉已经存在的数据"""
+        if data.empty:
+            return data
+
+        symbol = data['symbol'].iloc[0]
+        start_time = data['candle_begin_time'].min()
+        end_time = data['candle_begin_time'].max()
+
+        try:
+            # 查询已存在的时间点
+            query = """
+            SELECT candle_begin_time 
+            FROM bz_kline 
+            WHERE symbol = %(symbol)s 
+            AND candle_begin_time >= %(start_time)s 
+            AND candle_begin_time <= %(end_time)s
+            """
+            params = {
+                'symbol': symbol,
+                'start_time': start_time,
+                'end_time': end_time
+            }
+            existing_records = self.client.execute(query, params)
+            existing_times = {record[0] for record in existing_records}
+
+            # 过滤掉已存在的数据
+            original_count = len(data)
+            data = data[~data['candle_begin_time'].isin(existing_times)]
+            filtered_count = len(data)
+
+            if filtered_count < original_count:
+                logger.info(f"过滤掉 {original_count - filtered_count} 条已存在数据，剩余 {filtered_count} 条新数据")
+
+            return data
+        except Exception as e:
+            logger.error(f"过滤已存在数据失败 {symbol}: {e}")
+            return data
 
     @staticmethod
     def get_binance_kline(symbol: str, interval: str, start_time: dt.datetime,
@@ -202,6 +260,12 @@ class BinanceDataCollector:
         if data.empty:
             return
 
+        # 过滤掉已存在的数据
+        data = self.filter_existing_data(data)
+        if data.empty:
+            logger.info("所有数据已存在，跳过插入")
+            return
+
         total_rows = len(data)
         data = data.replace({np.nan: None})
 
@@ -251,6 +315,11 @@ class BinanceDataCollector:
 
                 logger.info(f"处理交易对 ({i + 1}/{len(usdt_pairs)}): {symbol}")
 
+                # 首先检查整个时间段的数据是否已经存在
+                if self.check_data_exists(symbol, start_date, end_date):
+                    logger.info(f"交易对 {symbol} 在 {start_date} 到 {end_date} 的数据已存在，跳过")
+                    continue
+
                 current_date = start_date
                 days_processed = 0
                 total_days = (end_date - start_date).days + 1
@@ -263,6 +332,13 @@ class BinanceDataCollector:
                         if not self._check_memory_usage():
                             logger.warning("内存使用过高，暂停处理")
                             time.sleep(10)
+
+                        # 检查当天数据是否已存在
+                        if self.check_data_exists(symbol, current_date, next_date):
+                            logger.info(f"{symbol} {current_date} 的数据已存在，跳过")
+                            current_date = current_date + dt.timedelta(days=1)
+                            days_processed += 1
+                            continue
 
                         df = self.get_binance_kline(
                             symbol=symbol,
@@ -328,7 +404,6 @@ def main():
             'password': 'z9CEdnxjTozUVv!!jH47Ln#',
             'database': 'contract_analysis'
         }
-
 
         logger.info("启动币安数据收集器")
 
