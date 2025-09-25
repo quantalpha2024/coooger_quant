@@ -328,6 +328,12 @@ def main():
             'password': 'z9CEdnxjTozUVv!!jH47Ln#',
             'database': 'contract_analysis'
         }
+        clickhouse_config={
+            'host':'cc-3nsqvaflp79lvvs06.clickhouse.ads.aliyuncs.com',
+            'port':59000,
+            'user':'ft_quant_admin',
+            'password':'z9CEdnxjTozUVv!!jH47Ln#',
+            'database':'contract_analysis'}
 
         logger.info("启动币安数据收集器")
 
